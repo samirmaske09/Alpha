@@ -1,22 +1,22 @@
 pipeline {
     agent any
     stages {
-        stage('11') {
+        stage('1') {
             steps { 
               sh  'hostnamectl' 
             }
         }
-        stage('22') {
+        stage('2') {
             steps { 
               sh  'hostnamectl'
             }
         }
-        stage('33') {
+        stage('3') {
             steps { 
               sh 'hostnamectl' 
             }
         }
-        stage('44') {
+        stage('4') {
             steps { 
               sh ' hostnamectl ' 
             }
