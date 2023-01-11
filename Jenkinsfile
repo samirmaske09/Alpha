@@ -3,7 +3,9 @@ pipeline{
         jdk 'myjava'
         maven 'mymaven'
     }
-	agent any
+	agent {
+	    label 'slave'
+	}
       stages{
            stage('pull'){
                steps{
@@ -24,20 +26,17 @@ pipeline{
           }
           stage('deploy-dev'){
               steps{
-                  sshagent(['tomcat-1']) {
-    // some block
-
-                          sh """
-                          scp -o StrictHostKeyChecking=no target/studentapp-2.2-SNAPSHOT.war centos@172.31.42.231:/opt/apache-tomcat-8.5.84/webapps/
+                  sshagent(['tomcat-deploy']) {
+                    sh """
+                          scp -o StrictHostKeyChecking=no target/studentapp-2.2-SNAPSHOT.war centos@172.31.42.231:/opt/apache-tomcat-8.5.84/webapps
                           
-                          ssh centos@172.31.42.231:/opt/apache-tomcat-8.5.84/bin/shutdown.sh
+                          ssh centos@172.31.42.231 sudo /opt/apache-tomcat-8.5.84/bin/shutdown.sh
                           
-                          ssh centos@172.31.42.231:/opt/apache-tomcat-8.5.84/bin/startup.sh
-                      
-                      """
+                          ssh centos@172.31.42.231 sudo /opt/apache-tomcat-8.5.84/bin/startup.sh
+                          
+                       """
                 }
               }
               }
           }
-      }
-
+}
