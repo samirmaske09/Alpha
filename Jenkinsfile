@@ -24,7 +24,7 @@ pipeline{
           }
           stage('deploy-dev'){
               steps{
-                  sshagent(['tomcat']) {
+                  sshagent(['tomcat-1']) {
     // some block
 
                           sh """
