@@ -25,6 +25,8 @@ pipeline{
           stage('deploy-dev'){
               steps{
                   sshagent(['tomcat']) {
+    // some block
+
                           sh """
                           scp -o StrictHostKeyChecking=no target/studentapp-2.2-SNAPSHOT.war centos@172.31.42.231:/opt/apache-tomcat-8.5.84/webapps/
                           
@@ -34,7 +36,7 @@ pipeline{
                       
                       """
                 }
-                  
+              }
               }
           }
       }
