@@ -1,43 +1,42 @@
-pipeline{
-    tools{
-        jdk 'myjava'
-        maven 'mymaven'
-    }
-	agent any
-      stages{
-           stage('pull'){
-               steps{
-		 echo 'cloning..'
-                 git branch: 'main', url: 'https://github.com/RohitKakde27/Alpha.git'
-              }
-          }
-          stage('Build'){
-              steps{
-                  echo 'Code-Build..'
-                  sh 'mvn compile'
-	      }
-          }
-          stage('Package'){
-              steps{
-                  sh 'mvn package'
-              }
-          }
-          stage('deploy-dev'){
-              steps{
-                  sshagent(['tomcat-1']) {
-    // some block
+pipeline {
+     agent any
+     stages {
+         
+         stage('Pull') {
+              steps {
+                 echo "Build stage is running"
+                 git branch: 'main', url: 'https://github.com/RohitKakde27/kubernetes-deployment.git'
+                    }
+                        }
+         
+         
+         stage("Docker build"){
+              steps {
+               sshagent(['docker.']) {
+                     
+                     
+                     sh   '    docker image build -t a .'
+                     sh   '    docker image tag a samirmaske23/a:latest '
+                     sh 'docker login -u samirmaske23 -p Samir@248652'
+                     sh   '    docker image push  samirmaske23/a:latest '
+                                    }
+                     }
+                              }      
+                             
+         
+         
+         stage('Test') {
+              steps {
+                 echo "Test stage is running"
+                    }
+                        }
+         
+         
+         stage('Deploy') {
+              steps {
+                 echo "Build stage is running"
+                    }
+                         }
+            }
 
-                          sh """
-                          scp -o StrictHostKeyChecking=no target/studentapp-2.2-SNAPSHOT.war centos@172.31.42.231:/opt/apache-tomcat-8.5.84/webapps/
-                          
-                          ssh centos@172.31.42.231:/opt/apache-tomcat-8.5.84/bin/shutdown.sh
-                          
-                          ssh centos@172.31.42.231:/opt/apache-tomcat-8.5.84/bin/startup.sh
-                      
-                      """
-                }
-              }
-              }
-          }
-      }
-
+}
